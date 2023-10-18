@@ -2,48 +2,57 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { getItems, deleteItem } from "../utils/data";
+import Modal from "./components/Modal";
 export default function Home() {
-  console.log(getItems());
-  const [categories, setcategories] = useState(getItems());
-  const deleteCategory = (id: any) => {
-    deleteItem(id);
-    setcategories(getItems());
-  };
+  const [categories, setCategories] = useState<any>(["Loading..."]);
+  const [modalvalue, setModalvalue] = useState(false)
 
+  useEffect(() => {
+    async function fetchCategory() {
+      const data = await (
+        await fetch("http://localhost:3000/api/category", {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json",
+          },
+        })
+      ).json();
+      console.log(data);
+      setCategories(data);
+    }
+    fetchCategory();
+  }, [modalvalue]);
+
+
+  console.log(categories);
+  const toggleModal=()=>{
+    setModalvalue(!modalvalue)
+  }
   return (
-    <main className="flex flex-col ">
-      <div className="h-[50px] w-full flex justify-around items-center px-2 bg-green-500">
-        <div>select category</div>
-        <Link href={"/category/add-category"}>
-          <div>add new category</div>
-        </Link>
+    <>
+      <div className="w-full justify-around flex bg-orange-500 items-center h-[64px]">
+        <div>Appname</div>
+
+        <div  onClick={()=>setModalvalue(true)} className=" px-4 cursor-pointer  py-2 rounded-lg capitalize bg-neutral-800">Add New Category</div>
+      <Modal modal1={modalvalue} changeModal={toggleModal}/>
       </div>
-      <div className=" flex justify-center mx-2 ">
-        <div className=" w-full lg:max-w-lg ">
+      <div className="flex  justify-center  ">
+        <div className=" rounded-2xl my-5 flex   bg-white  lg:max-w-lg">
+          <div className="p-5">
           {categories.map((category: any, index: number) => (
-            <div
-              className={`flex  rounded-md w-full my-2 justify-between p-4 ${
-                index % 2 !== 0 ? "bg-gray-500 text-white" : "bg-gray-700"
-              }`}
-            >
-              <Link href={`/questions-answers/${category.category}`}>
-                {" "}
-                <div  className="uppercase">{category.category}</div>
-              </Link>
+            <Link href={`/questions-answers/${category}`}>
               <div
-                className="flex "
-                onClick={() => deleteCategory(category.id)}
+                className={`${
+                  index % 2 === 0 ? "bg-gray-500" : "bg-gray-800"
+                } p-5 rounded-lg uppercase  my-2 mx-1`}
               >
-                {" "}
-                <div className="capitalize text-red-500 px-4">
-                  <button>
-delete</button>
-                </div>
+                {category}
               </div>
-            </div>
+            </Link>
           ))}
+          </div>
         </div>
       </div>
-    </main>
+    </>
   );
 }

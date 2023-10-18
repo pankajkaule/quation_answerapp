@@ -12,7 +12,7 @@ const AddCategory = () => {
 
   const addCategory = () => {
     category === ""
-      ? alert("Please Enter Category Name")
+      ? alert("Please Enter Subject Name")
       : addItem({ id, category }),
       router.push("/");
   };
@@ -20,7 +20,7 @@ const AddCategory = () => {
   return (
     <div className="flex flex-col">
       <div className="flex items-center justify-around p-2 bg-green-500">
-        <div>AddCategory</div>
+        <div>Add Subject</div>
 
         <div>
           <Link href={"/"}>
@@ -31,21 +31,21 @@ const AddCategory = () => {
       <div className=" flex justify-center  w-full  ">
         <div className="w-full lg:max-w-lg   ">
       <div className="p-4 m-4 rounded-lg  flex flex-col justify-center bg-orange-300 ">
-        <div className="py-2">Enter category</div>
+        <div className="py-2">Enter Subject</div>
         <input
           type="text"
           className="text-black p-2 rounded-md focus:border-none "
           value={category}
           onChange={(e) => setcategory(e.target.value)}
-          placeholder="category"
+          placeholder="Subject"
         />
         <div className="flex justify-center">
           {" "}
           <div
-            className="my-8 w-[200px] text-center p-2 bg-orange-700 rounded-md"
+            className="my-8 w-[200px] text-center cursor-pointer p-2 bg-orange-700 rounded-md"
             onClick={addCategory}
           >
-            Add Category{" "}
+            Add Subject{" "}
           </div>
         </div>
       </div>
